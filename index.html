@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Acme&family=Poppins&display=swap');
+    </style>
+    <title>Typing Speed Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Acme', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .maindiv {
+            position: relative;
+            background-color: rgb(7, 164, 164);
+            width: 100%;
+            height: 100vh;
+        }
+
+        .centerdiv {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        textarea {
+            color: whitesmoke;
+            font-size: 1.3rem;
+            background-color: black;
+            border: 3px solid whitesmoke;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .mainbtn {
+            padding: 4px 10px;
+            font-size: large;
+            font-weight: bold;
+            color: black;
+            background-color: whitesmoke;
+            border: 2px solid black;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        .mainbtn:hover {
+            color: black;
+            background-color: yellow;
+            border: 2px solid black
+        }
+    </style>
+</head>
+
+<body>
+    <div class="maindiv">
+        <div class="centerdiv">
+            <h1>Welcome to this test!</h1>
+            <h2 id="msg"></h2>
+            <br>
+            <textarea id="mywords" cols="100" rows="10" placeholder="Be careful while typing "></textarea>
+            <br>
+            <button class="mainbtn" id="btn"> Start </button>
+        </div>
+    </div>
+
+    <script>
+        const setOfWords = ["Lorem ipsum dolor sit amet consectetur adipisicing elit.", "Tenetur animi cupiditate tempora quos alias, itaque velit iure sint beatae numquam commodi, omnis culpa optio voluptate mollitia quasi magni! Culpa officiis expedita repudiandae quaerat.", " corporis quos voluptatum nobis est nesciunt non pariatur minus in saepe veniam ex facilis optio deleniti numquam?", " Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis, facilis?", "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum excepturi odit maxime esse ad ipsa minus natus repudiandae quidem provident!"
+        ];
+        const msg = document.getElementById('msg');
+        const typeWords = document.getElementById('mywords');
+        const btn = document.getElementById('btn');
+        let startTime, endTime;
+
+
+        const playGame = () => {
+            let randomNumber = Math.floor(Math.random() * setOfWords.length);
+            msg.innerText = setOfWords[randomNumber];
+            let date = new Date();
+            startTime = date.getTime();
+            btn.innerText = "Done"
+        }
+
+        const endplay = () => {
+            let date = new Date();
+            endTime = date.getTime();
+            let totalTime = Math.round((endTime - startTime) / 1000);
+            console.log(totalTime);
+
+            let totalStr = typeWords.value;
+            let wordCount = wordCounter(totalStr);
+
+
+            let speed = Math.round((wordCount / totalTime) * 60);
+
+            let finalmsg = "Your typing speed is " + speed + " words per minutes ";
+
+            finalmsg += compareWords(msg.innerText, totalStr);
+            msg.innerText = finalmsg;
+
+        }
+
+        const wordCounter = (str) => {
+            //It will count word if and only if  words are separated by space.
+            let response = str.split(" ").length;
+            console.log(response)
+            return response;
+        }
+
+        const compareWords = (str1, str2) => {
+            let words1 = str1.split(" ");
+            let words2 = str2.split(" ");
+            let cnt = 0;
+
+            //arrayName then foreach then it will take whole function with value and index no. of that array 
+            words1.forEach(function (item, index) {
+                if (item == words2[index]) {
+                    cnt++;
+                }
+            })
+            let errorWords = (words1.length - cnt);
+            return (cnt + " correct out of " + words1.length + " Words and the total number of error are " + errorWords + ".");
+        }
+        btn.addEventListener('click', function () {
+            if (this.innerText == 'Start') {
+                typeWords.disabled = false;
+                playGame();
+            }
+            else if (this.innerText == "Done") {
+                typeWords.disabled = true;
+                btn.innerText = "Start";
+                endplay();
+            }
+        })
+    </script>
+</body>
+
+</html>
